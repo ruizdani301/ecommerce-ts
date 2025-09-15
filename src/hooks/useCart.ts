@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import type { CartItem, Guitar } from '../types/type'
 import { db } from '../data/db'
 
 export function useCart() {
-    const initialCart = () => {
+    // obtiene el carrito q es de tipo CartItem[]
+    const initialCart = (): CartItem[] => {
     const cartFromStorage = localStorage.getItem('cart');
     return cartFromStorage ? JSON.parse(cartFromStorage) : [];
   }
@@ -18,7 +20,7 @@ export function useCart() {
   },[cart])
 
 
-  function addToCart(item) {
+  function addToCart(item: Guitar) {
     const itemExists = cart.findIndex((cartItem) => cartItem.id === item.id);
     if (itemExists >= 0) {
       if (cart[itemExists].quantity >= MAX_QUANTITY) {return}
@@ -30,17 +32,19 @@ export function useCart() {
       setCart(updatedCart);
     }
     else {
-      item.quantity = 1;
-      setCart([...cart, item]);
+      const newItem: CartItem = { ...item, quantity: 1 }; // Crear un nuevo objeto con quantity
+      // Si el item no existe, agregarlo al carrito con cantidad 1
+      // spread saca los elementos del cart y agregamos uno nuevo newItem
+      setCart([...cart, newItem]);
     }}
-  function removeFromCart(guitar_id) {
+  function removeFromCart(guitar_id: Guitar['id']) {
     // al pasar una funcion a un set internammente react pasa
     // el valor del estado como parametro de esa funcion
     // crea un array nuevo sin el item que quiero eliminar
     // se usa filter porq no modifica el array original sino q crea uno nuevo
     setCart(oldValue => oldValue.filter(item => item.id !== guitar_id));
   }
-  function increaseQuantity(guitar_id) {
+  function increaseQuantity(guitar_id: Guitar['id']) {
     const updatedCart = cart.map(item => {
       if (item.id === guitar_id && item.quantity < MAX_QUANTITY) {
         return { ...item,
@@ -51,7 +55,7 @@ export function useCart() {
     });
     setCart(updatedCart);
   }
-  function decreaseQuantity(guitar_id) {
+  function decreaseQuantity(guitar_id: Guitar['id']) {
     const updatedCart = cart.map(item => {
       if (item.id === guitar_id && item.quantity > MIN_QUANTITY) {
         return { ...item,

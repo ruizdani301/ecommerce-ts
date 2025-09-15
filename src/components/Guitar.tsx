@@ -1,8 +1,17 @@
-function Guitar(props) {
+import type { Guitar } from '../types/type';
+
+
+type GuitarProps = {
+    guitar: Guitar;
+    addToCart: (item: Guitar) => void;
+}
+
+function Guitar(props: GuitarProps) {
     // destructuring de props y guitar en la clave como se envia desde App.jsx
     const { guitar, addToCart } = props; // Destructurar del objeto props
+    // Destructurar del objeto guitar
     const { id, name, image, description, price } = guitar;
-
+    
 
     return (
         <div className="col-md-6 col-lg-4 my-4 row align-items-center">

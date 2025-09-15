@@ -1,4 +1,16 @@
-function Header(props) {
+import type { CartItem, Guitar } from "../types/type";
+
+
+type HeaderProps = {
+    cart: CartItem[];
+    removeFromCart: (guitar_id: Guitar['id']) => void;
+    increaseQuantity: (guitar_id: Guitar['id']) => void;
+    decreaseQuantity: (guitar_id: Guitar['id']) => void;
+    clearCart: () => void;
+    cartTotal: () => number;
+}
+
+function Header(props: HeaderProps) {
     const { cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, cartTotal } = props;
     //const cartTotal = () => cart.reduce((total, item) => total + (item.quantity * item.price), 0)
  
